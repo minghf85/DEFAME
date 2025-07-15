@@ -32,3 +32,5 @@ out/
 
 .idea/
 **/.DS_Store
+
+config/api_keys.yaml
