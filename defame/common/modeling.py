@@ -84,7 +84,7 @@ class OpenAIAPI:
         self.model = model
         if not api_keys["openai_api_key"]:
             raise ValueError("No OpenAI API key provided. Add it to config/api_keys.yaml")
-        self.client = OpenAI(api_key=api_keys["openai_api_key"])
+        self.client = OpenAI(api_key=api_keys["openai_api_key"],base_url="https://yunwu.ai/v1")
 
     def __call__(self, prompt: Prompt, system_prompt: str, **kwargs):
         if prompt.has_videos():
