@@ -7,7 +7,7 @@ import requests
 from ezmm import MultimodalSequence, Image
 from firecrawl import AsyncFirecrawlApp
 
-from config.globals import firecrawl_url
+from config.globals import firecrawl_url,firecrawl_api_key
 from defame.common import logger
 from defame.evidence_retrieval.integrations import RETRIEVAL_INTEGRATIONS
 from defame.evidence_retrieval.integrations.search import WebSource
@@ -26,7 +26,7 @@ class Scraper:
     requiring an API and the API integration is implemented (e.g. X, Reddit etc.), the
     respective API will be used instead of direct HTTP requests."""
 
-    def __init__(self, allow_fact_checking_sites: bool = True, firecrawl_api_key: str = 'fc-98db92be2df240c8ab8aea7a5d569e0a'):
+    def __init__(self, allow_fact_checking_sites: bool = True):
         self.allow_fact_checking_sites = allow_fact_checking_sites
         self.firecrawl_app = AsyncFirecrawlApp(api_key=firecrawl_api_key)
         self.n_scrapes = 0
