@@ -31,14 +31,16 @@ class Worker(Process):
 
     def get_messages(self):
         msgs = []
-        try:
-            while self._connection.poll():
-                msgs.append(self._connection.recv())
-        except EOFError:
-            msgs.append(dict(worker_id=self.id,
-                             status=Status.FAILED,
-                             status_message=f"Meta connection of worker {self.id} closed unexpectedly."))
-            self.terminate()
+        while self._connection.poll():
+            msgs.append(self._connection.recv())
+        # try:
+        #     while self._connection.poll():
+        #         msgs.append(self._connection.recv())
+        # except EOFError:
+        #     msgs.append(dict(worker_id=self.id,
+        #                      status=Status.FAILED,
+        #                      status_message=f"Meta connection of worker {self.id} closed unexpectedly."))
+        #     self.terminate()
         return msgs
 
     def __getstate__(self):
