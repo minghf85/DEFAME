@@ -47,7 +47,7 @@ class Planner:
             actions = response["actions"]
             reasoning = response["reasoning"]
 
-            # Remove actions that have been performed before
+            # add actions that haven't been performed before
             performed_actions = doc.get_all_actions()
             actions = [action for action in actions if action not in performed_actions]
 

@@ -1,0 +1,39 @@
+# config/text_analyzer_example.yaml
+# 示例配置文件：使用文本分析工具
+
+# 基本设置
+name: "text_analyzer_example"
+description: "使用文本分析工具的示例配置"
+
+# 工具配置
+tools:
+  # 搜索工具
+  searcher:
+    enabled: true
+    
+  # 文本分析工具（新增）
+  text_analyzer:
+    enabled: true
+    # 可以添加工具特定配置（如果需要）
+    # sentiment_threshold: 0.1
+    # max_keywords: 10
+    
+  # 可信度检查工具
+  credibility_checker:
+    enabled: true
+
+# LLM 配置
+llm:
+  model: "gpt-4"
+  temperature: 0.3
+  max_tokens: 2000
+
+# 其他配置
+max_iterations: 5
+verbose: true
+save_evidence: true
+
+# 评估设置（可选）
+evaluation:
+  metrics: ["accuracy", "precision", "recall"]
+  save_results: true

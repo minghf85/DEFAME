@@ -65,17 +65,25 @@ class Pool:
             return [d % n_devices for d in range(self.n_workers)]
 
     def _run_workers(self):
+        print(f"Pool: Starting {self.n_workers} workers with device assignments: {self.device_assignments}")
         for i in range(self.n_workers):
             device = self.device_assignments[i]
-            worker = FactCheckerWorker(
-                identifier=i,
-                kwargs=dict(**self.kwargs,
-                            input_queue=self._scheduled_tasks,
-                            output_queue=self._results,
-                            device_id=device)
-            )
-            self.workers.append(worker)
-            logger.debug(f"Started worker {i} with PID {worker.pid}.")
+            print(f"Pool: Creating worker {i} with device_id={device}")
+            try:
+                worker = FactCheckerWorker(
+                    identifier=i,
+                    kwargs=dict(**self.kwargs,
+                                input_queue=self._scheduled_tasks,
+                                output_queue=self._results,
+                                device_id=device)
+                )
+                self.workers.append(worker)
+                print(f"Pool: Worker {i} started successfully with PID {worker.pid}")
+                logger.debug(f"Started worker {i} with PID {worker.pid}.")
+            except Exception as e:
+                print(f"Pool: Failed to create worker {i}: {e}")
+                import traceback
+                print(traceback.format_exc())
 
     def get_worker(self, worker_id: int) -> FactCheckerWorker:
         return self.workers[worker_id]
@@ -107,17 +115,23 @@ class Pool:
         started working at task XY) and updates the tasks accordingly."""
         for worker_id, worker in enumerate(self.workers):
             if worker.is_alive():
-                for msg in worker.get_messages():
-                    assert msg.get("worker_id") in [None, worker_id]
-                    status = msg.get("status")
-                    if status == Status.FAILED:
-                        logger.error(msg.get('status_message'))
-                        # TODO: Move entire error message processing here
-                    task_id = msg.get("task_id")
-                    if task_id is not None:
-                        task = self.tasks[task_id]
-                        task.assign_worker(self.workers[worker_id])
-                        task.update(msg)
+                try:
+                    for msg in worker.get_messages():
+                        assert msg.get("worker_id") in [None, worker_id]
+                        status = msg.get("status")
+                        if status == Status.FAILED:
+                            logger.error(msg.get('status_message'))
+                            # TODO: Move entire error message processing here
+                        task_id = msg.get("task_id")
+                        if task_id is not None:
+                            task = self.tasks[task_id]
+                            task.assign_worker(self.workers[worker_id])
+                            task.update(msg)
+                except Exception as e:
+                    print(f"Pool: Error processing messages from worker {worker_id}: {e}")
+                    # Don't re-raise, just log and continue with other workers
+            else:
+                print(f"Pool: Worker {worker_id} is not alive (PID: {worker.pid})")
 
     def report_errors(self):
         # Forward error logs
@@ -148,5 +162,12 @@ class Pool:
 
     def wait_until_ready(self):
         """Sleeps until all workers are alive."""
+        print(f"Pool: Waiting for all {self.n_workers} workers to be ready...")
+        wait_count = 0
         while not self.is_ready():
+            wait_count += 1
+            if wait_count % 50 == 0:  # Print every 5 seconds
+                alive_workers = [i for i, w in enumerate(self.workers) if w.is_alive()]
+                print(f"Pool: Still waiting... Alive workers: {alive_workers}/{len(self.workers)}")
             time.sleep(0.1)
+        print(f"Pool: All workers are ready!")

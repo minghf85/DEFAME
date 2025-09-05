@@ -67,10 +67,29 @@ class Benchmark(ABC, Iterable):
 
     def get_by_id(self, claim_id: str):
         """Returns the instance with the given ID (different from the instance's index)."""
+        # 尝试不同的ID匹配方式
         for instance in self:
-            if instance["id"] == claim_id:
+            instance_id = instance["id"]
+            logger.debug(f"Comparing claim_id '{claim_id}' (type: {type(claim_id)}) with instance_id '{instance_id}' (type: {type(instance_id)})")
+            # 直接匹配
+            if instance_id == claim_id:
                 return instance
-        raise ValueError(f"Benchmark does not contain any instance with ID {claim_id}.")
+            # 字符串匹配
+            if str(instance_id) == str(claim_id):
+                return instance
+            # 如果都是数字，尝试数值匹配
+            try:
+                if int(instance_id) == int(claim_id):
+                    return instance
+            except (ValueError, TypeError):
+                pass
+        
+        # 如果找不到，提供更详细的错误信息
+        available_ids = [str(instance["id"]) for instance in self.data[:10]]  # 只显示前10个
+        if len(self.data) > 10:
+            available_ids.append("...")
+        raise ValueError(f"Benchmark does not contain any instance with ID '{claim_id}' (type: {type(claim_id)}). "
+                        f"Available IDs (first 10): {available_ids}")
 
     def get_class_name(self, label: Label) -> str:
         """Returns the original class name for the given standard Label."""
@@ -92,9 +111,16 @@ class Benchmark(ABC, Iterable):
         """Handles the model's output and evaluates whether it is correct."""
         doc, meta = output
         claim = doc.claim
-        instance = self.get_by_id(claim.id)
-        prediction = doc.verdict
-        self._save_prediction(doc, meta, claim, prediction, instance.get("label"), instance.get("justification"))
+        try:
+            instance = self.get_by_id(claim.id)
+            prediction = doc.verdict
+            self._save_prediction(doc, meta, claim, prediction, instance.get("label"), instance.get("justification"))
+        except ValueError as e:
+            # 记录错误但不中断程序
+            logger.log(f"Warning: {e}")
+            # 使用None作为默认值继续处理
+            prediction = doc.verdict
+            self._save_prediction(doc, meta, claim, prediction, None, None)
 
     def _save_prediction(self, doc, meta, claim, prediction, target_label=None, gt_justification=None):
         logger.save_next_prediction(

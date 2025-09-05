@@ -25,7 +25,9 @@ class VERITE(Benchmark):
         Label.SUPPORTED:
             "The claim accurately and coherently describes the origin, content, and context of the image.",
         Label.OUT_OF_CONTEXT:
-            "The claim uses the image out of context, i.e., the image itself is pristine but the claim constructs a false narrative around the image or uses the image in a misleading way. In particular, the claim misrepresents the origin, content, and/or meaning of the image."
+            "The claim uses the image out of context, i.e., the image itself is pristine but the claim constructs a false narrative around the image or uses the image in a misleading way. In particular, the claim misrepresents the origin, content, and/or meaning of the image.",
+        Label.MISCAPTIONED: "The claim has a true image, but the caption does not accurately describe the image, "
+                        "providing incorrect information."
     }
 
     extra_prepare_rules = """**Assess Alignment**: Assess the alignment between image and text in complex scenarios. Prepare for varied real-world images and captions.

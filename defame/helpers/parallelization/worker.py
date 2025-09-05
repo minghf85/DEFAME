@@ -22,8 +22,11 @@ class Worker(Process):
 
         self.id = identifier
         self._connection: Connection = conn_receive
+        self._connection_closed = False
 
+        print(f"Worker {identifier}: Initializing worker process")
         self.start()
+        print(f"Worker {identifier}: Worker process started with PID {self.pid}")
 
     def task_updates(self) -> dict:
         while self._connection.poll():
@@ -31,26 +34,42 @@ class Worker(Process):
 
     def get_messages(self):
         msgs = []
-        while self._connection.poll():
-            msgs.append(self._connection.recv())
-        # try:
-        #     while self._connection.poll():
-        #         msgs.append(self._connection.recv())
-        # except EOFError:
-        #     msgs.append(dict(worker_id=self.id,
-        #                      status=Status.FAILED,
-        #                      status_message=f"Meta connection of worker {self.id} closed unexpectedly."))
-        #     self.terminate()
+        try:
+            while self._connection.poll():
+                msgs.append(self._connection.recv())
+        except EOFError:
+            if not self._connection_closed:
+                print(f"Worker {self.id}: Connection closed unexpectedly")
+                self._connection_closed = True
+                msgs.append(dict(worker_id=self.id,
+                                 status=Status.FAILED,
+                                 status_message=f"Meta connection of worker {self.id} closed unexpectedly."))
+                # Don't terminate here as it might cause deadlock
+        except Exception as e:
+            print(f"Worker {self.id}: Error in get_messages: {e}")
+            msgs.append(dict(worker_id=self.id,
+                             status=Status.FAILED,
+                             status_message=f"Error in worker {self.id} communication: {str(e)}"))
         return msgs
 
     def __getstate__(self):
-        return {"id": self.id}
+        # 保存 Process 类需要的基本属性，但排除不能序列化的连接对象
+        state = self.__dict__.copy()
+        # 移除不能序列化的连接对象
+        if '_connection' in state:
+            del state['_connection']
+        return state
+    
+    def __setstate__(self, state):
+        # 恢复对象状态
+        self.__dict__.update(state)
+        # 连接对象将在需要时重新创建，但在子进程中通常不需要
 
 
 class FactCheckerWorker(Worker):
-    def __init__(self, identifier: int, *args, **kwargs):
+    def __init__(self, identifier: int, kwargs: dict):
         self.runner = Runner(worker_id=identifier)
-        super().__init__(identifier, *args, target=self.runner.execute, **kwargs)
+        super().__init__(identifier, target=self.runner.execute, kwargs=kwargs)
 
 
 class Runner:
@@ -58,7 +77,7 @@ class Runner:
     # TODO: Use multiprocessing.Manager (instead of Queues/Connection) to share data between pool & worker
     """The instance actually executing the routine inside the worker subprocess."""
 
-    def __init__(self, worker_id: int = None):
+    def __init__(self, worker_id: int | None = None):
         self.running = True
         self.worker_id = worker_id
 
@@ -78,26 +97,36 @@ class Runner:
         # signal.signal(signal.SIGTERM, self.stop)
         # signal.signal(signal.SIGINT, self.stop)
 
+        print(f"Runner for worker {self.worker_id}: Starting execute method")
+        
         def report(status_message: str, **kwargs):
             task_id = task.id if locals().get("task") else None
-            connection.send(dict(worker_id=self.worker_id,
-                                 task_id=task_id,
-                                 status_message=status_message,
-                                 **kwargs))
+            try:
+                connection.send(dict(worker_id=self.worker_id,
+                                     task_id=task_id,
+                                     status_message=status_message,
+                                     **kwargs))
+                print(f"Runner for worker {self.worker_id}: Sent report: {status_message}")
+            except Exception as e:
+                print(f"Runner for worker {self.worker_id}: Failed to send report: {e}")
 
         try:
+            print(f"Runner for worker {self.worker_id}: Initializing with device_id={device_id}")
             device = None if device_id is None else f"cuda:{device_id}"
 
             logger.set_experiment_dir(target_dir)
             logger.set_log_level(print_log_level)
             logger.set_connection(connection)
 
+            print(f"Runner for worker {self.worker_id}: Creating FactChecker with device={device}")
             # Initialize the fact-checker
             fc = FactChecker(device=device, **kwargs)
+            print(f"Runner for worker {self.worker_id}: FactChecker initialized successfully")
 
         except Exception:
             error_message = f"Worker {self.worker_id} encountered an error during startup:\n"
             error_message += traceback.format_exc()
+            print(f"Runner for worker {self.worker_id}: Startup error: {error_message}")
             report(error_message, status=Status.FAILED)
             quit(-1)
 

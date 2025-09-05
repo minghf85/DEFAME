@@ -8,6 +8,7 @@ from .manipulation_detector import ManipulationDetector, DetectManipulation
 from .object_detector import ObjectDetector, DetectObjects
 from .searcher import Searcher, Search
 from .text_extractor import TextExtractor, OCR
+from .text_analyzer import TextAnalyzer, AnalyzeText
 from .tool import Tool
 
 TOOL_REGISTRY = [
@@ -18,6 +19,7 @@ TOOL_REGISTRY = [
     Searcher,
     TextExtractor,
     ManipulationDetector,
+    TextAnalyzer,
 ]
 
 ACTION_REGISTRY = {
@@ -28,6 +30,7 @@ ACTION_REGISTRY = {
     CredibilityCheck,
     OCR,
     DetectManipulation,
+    AnalyzeText,
 }
 
 IMAGE_ACTIONS = {

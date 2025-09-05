@@ -249,17 +249,18 @@ def plot_histogram_comparison(data_rows: list,
     if colors is not None:
         assert len(colors) == n_data_rows
 
-    data_rows = np.array(data_rows)
-
     if hist_range is None:
-        hist_range = (np.min(data_rows), np.max(data_rows))
+        # 计算所有数据的最小值和最大值
+        all_data = np.concatenate([np.array(d) for d in data_rows])
+        hist_range = (np.min(all_data), np.max(all_data))
 
     binned_data_sets = [
         np.histogram(d, range=hist_range, bins=n_bins)[0]
         for d in data_rows
     ]
     binned_maximums = np.max(binned_data_sets, axis=1)
-    x_locations = np.arange(0, sum(binned_maximums), np.max(binned_maximums))
+    # 修复 x_locations 计算，确保与 labels 数量匹配
+    x_locations = np.arange(0, len(binned_data_sets) * np.max(binned_maximums), np.max(binned_maximums))
 
     # The bin_edges are the same for all the histograms
     bin_edges = np.linspace(hist_range[0], hist_range[1], n_bins + 1)
