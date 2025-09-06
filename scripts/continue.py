@@ -1,7 +1,7 @@
 """Use this script to resume an incomplete evaluation run."""
 
 # experiment_dir = "out/verite/summary/dynamic/gpt_4o/2025-08-24_18-29 verite"
-experiment_dir = "out/claimreview2024/summary/dynamic/gpt_4o/2025-08-26_20-26 claimreview2024"
+experiment_dir = "out/verite/summary/dynamic/gpt_4o/2025-08-24_18-29 verite"
 if __name__ == '__main__':  # evaluation uses multiprocessing
     from multiprocessing import set_start_method
     set_start_method("spawn")

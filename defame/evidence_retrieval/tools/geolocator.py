@@ -101,25 +101,35 @@ class Geolocator(Tool):
                        'United Arab Emirates',
                        'United Kingdom', 'United States', 'Uruguay']
 
-        inputs = self.processor(text=choices, images=image, return_tensors="pt", padding=True).to(self.device)
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-        logits_per_image = outputs.logits_per_image
-        prediction = logits_per_image.softmax(dim=1)
+        try:
+            inputs = self.processor(text=choices, images=image, return_tensors="pt", padding=True).to(self.device)
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+            logits_per_image = outputs.logits_per_image
+            prediction = logits_per_image.softmax(dim=1)
 
-        # Compute classification score for each country
-        confidences = {choices[i]: round(float(prediction[0][i].item()), 2) for i in range(len(choices))}
-        top_k_locations = dict(sorted(confidences.items(), key=lambda x: x[1], reverse=True)[:self.top_k])
-        most_likely_location = max(top_k_locations, key=top_k_locations.get)
-        model_output = logits_per_image
-        result = GeolocationResults(
-            text=f"The most likely countries where the image was taken are: {top_k_locations}",
-            most_likely_location=most_likely_location,
-            top_k_locations=list(top_k_locations.keys()),
-            model_output=model_output
-        )
-        logger.log(str(result))
-        return result
+            # Compute classification score for each country
+            confidences = {choices[i]: round(float(prediction[0][i].item()), 2) for i in range(len(choices))}
+            top_k_locations = dict(sorted(confidences.items(), key=lambda x: x[1], reverse=True)[:self.top_k])
+            most_likely_location = max(top_k_locations, key=top_k_locations.get)
+            model_output = logits_per_image
+            result = GeolocationResults(
+                text=f"The most likely countries where the image was taken are: {top_k_locations}",
+                most_likely_location=most_likely_location,
+                top_k_locations=list(top_k_locations.keys()),
+                model_output=model_output
+            )
+            logger.log(str(result))
+            return result
+        except ValueError as e:
+            logger.log(f"Skipping geolocation due to image processing error: {e}")
+            result = GeolocationResults(
+                text="Geolocation skipped due to image format incompatibility",
+                most_likely_location="Unknown",
+                top_k_locations=[],
+                model_output=None
+            )
+            return result
 
     def _summarize(self, result: GeolocationResults, **kwargs) -> Optional[MultimodalSequence]:
         return MultimodalSequence(result.text)  # TODO: Improve summary w.r.t. uncertainty

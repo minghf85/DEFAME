@@ -23,3 +23,7 @@ def test_profile():
     for url in urls_to_test:
         result = bluesky.retrieve(url)
         print(result)
+
+test_posts()
+
+test_profile()

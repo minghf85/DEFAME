@@ -13,6 +13,7 @@ from config.globals import api_keys
 from defame.common import logger
 from defame.evidence_retrieval.integrations.integration import RetrievalIntegration
 from defame.evidence_retrieval.integrations.social_media import SocialMediaPost, SocialMediaProfile
+from defame.evidence_retrieval.integrations.social_media.common import SocialMediaPostMetadata
 from defame.utils.requests import is_image_url
 
 
@@ -37,7 +38,7 @@ class Bluesky(RetrievalIntegration):
     def _retrieve(self, url: str) -> SocialMediaPost | SocialMediaProfile | None:
         """Retrieve a post from the given URL."""
         if not self.authenticated:
-            raise "Bluesky API is not authenticated."
+            raise RuntimeError("Bluesky API is not authenticated.")
 
         if "post" in url:
             result = self._retrieve_post(url)
@@ -186,9 +187,8 @@ class Bluesky(RetrievalIntegration):
                     reply_to_author = reply_to_post.author
                     reply_to = f"https://bsky.app/profile/{reply_to_author.handle}/post/{post_id}"
 
-            # Create the post result
-            return SocialMediaPost(
-                content=[post_text, *media],
+            # Create the post metadata
+            metadata = SocialMediaPostMetadata(
                 platform="bluesky",
                 post_url=original_url,
                 author_username=author_username,
@@ -203,8 +203,11 @@ class Bluesky(RetrievalIntegration):
                 reply_to=reply_to,
                 hashtags=hashtags,
                 mentions=mentions,
-                external_links=external_links  # TODO: Integrate external link in post
+                external_links=external_links
             )
+
+            # Create the post result
+            return SocialMediaPost(post_text, *media, metadata=metadata)
         except Exception as e:
             err_msg = error_to_string(e)
             logger.error(f"Error getting Bluesky post data: {err_msg}")

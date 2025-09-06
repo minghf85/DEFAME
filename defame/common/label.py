@@ -29,3 +29,17 @@ DEFAULT_LABEL_DEFINITIONS = {
     Label.MISCAPTIONED: "The claim has a true image, but the caption does not accurately describe the image, "
                         "providing incorrect information.",
 }
+
+class DifficultyLabel(Enum):
+    EASY = "easy"
+    MEDIUM = "medium"
+    HARD = "hard"
+
+DEFAULT_DIFFICULTY_DEFINITIONS = {
+    DifficultyLabel.EASY: "The claim can be verified with high confidence using a single reliable source or "
+                          "a straightforward fact-checking method.",
+    DifficultyLabel.MEDIUM: "The claim requires cross-referencing multiple reliable sources or involves "
+                            "some complexity in verification, but can still be resolved with moderate effort.",
+    DifficultyLabel.HARD: "The claim is difficult to verify due to lack of reliable sources, conflicting information, "
+                         "or requires specialized knowledge or expertise to assess its validity.",
+}
