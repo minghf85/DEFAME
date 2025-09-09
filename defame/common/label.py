@@ -36,10 +36,7 @@ class DifficultyLabel(Enum):
     HARD = "hard"
 
 DEFAULT_DIFFICULTY_DEFINITIONS = {
-    DifficultyLabel.EASY: "The claim can be verified with high confidence using a single reliable source or "
-                          "a straightforward fact-checking method.",
-    DifficultyLabel.MEDIUM: "The claim requires cross-referencing multiple reliable sources or involves "
-                            "some complexity in verification, but can still be resolved with moderate effort.",
-    DifficultyLabel.HARD: "The claim is difficult to verify due to lack of reliable sources, conflicting information, "
-                         "or requires specialized knowledge or expertise to assess its validity.",
+    DifficultyLabel.EASY: "Verifiable through single reliable source or simple method. Visual content is clear and intuitive, requiring no specialized knowledge.",
+    DifficultyLabel.MEDIUM: "Requires cross-referencing multiple sources. Visual content may need detailed analysis or temporal/spatial context verification.",
+    DifficultyLabel.HARD: "Lacks reliable sources, has conflicting information, or requires specialized knowledge to analyze complex visual content and contextual relationships.",
 }

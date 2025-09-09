@@ -53,9 +53,11 @@ class ClaimReview2024(Benchmark):
 
         data = []
         for i, entry in enumerate(raw_data):
-            image_path = Path(data_root_dir / "MAFC" / entry["image"][0]) if entry["image"] else None
+            image_path = Path(data_root_dir / "ClaimReview2024plus" / entry["image"]) if entry["image"] else None
+            # print("image_path:", image_path)
             image = Image(image_path) if (image_path and os.path.exists(image_path)) else None
             claim_text = f"{image.reference} {entry['text']}" if image else f"{entry['text']}"
+            print(claim_text)
             label_text = entry.get("label")
             date_str = entry.get("date")
             date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ") if date_str else None
@@ -75,5 +77,5 @@ class ClaimReview2024(Benchmark):
 
 if __name__ == "__main__":
     benchmark = ClaimReview2024()
-    for claim in benchmark:
-        print(claim)
+    # for claim in benchmark:
+    #     print(claim)
