@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模态事实检查团队结构</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .difficulty-section {
+            margin-bottom: 40px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .difficulty-header {
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .easy { background-color: #27ae60; }
+        .medium { background-color: #f39c12; }
+        .hard { background-color: #e74c3c; }
+        
+        .team-structure {
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .node {
+            background: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .leader {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .specialist {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .agent {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .level {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px;
+        }
+        
+        .connection {
+            width: 2px;
+            height: 30px;
+            background: #3498db;
+            margin: 5px 0;
+        }
+        
+        .horizontal-connection {
+            height: 2px;
+            background: #3498db;
+            width: 100px;
+            margin: 15px 5px;
+        }
+        
+        .description {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            max-width: 120px;
+        }
+        
+        .workflow {
+            margin-top: 20px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        
+        .workflow h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .workflow ol {
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>多模态事实检查团队结构</h1>
+        
+        <!-- EASY 难度团队结构 -->
+        <div class="difficulty-section">
+            <div class="difficulty-header easy">
+                EASY - 简单难度团队结构
+            </div>
+            <div class="team-structure">
+                <div class="tree">
+                    <div class="node leader">
+                        事实检查Leader
+                        <div class="description">统筹协调，结果汇总</div>
+                    </div>
+                    <div class="connection"></div>
+                    <div class="level">
+                        <div class="branch">
+                            <div class="node agent">
+                                文本分析Agent
+                                <div class="description">文本内容验证</div>
+                            </div>
+                        </div>
+                        <div class="horizontal-connection"></div>
+                        <div class="branch">
+                            <div class="node agent">
+                                图像分析Agent
+                                <div class="description">图像内容识别</div>
+                            </div>
+                        </div>
+                        <div class="horizontal-connection"></div>
+                        <div class="branch">
+                            <div class="node agent">
+                                源验证Agent
+                                <div class="description">单一源验证</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <h4>工作流程：</h4>
+                    <ol>
+                        <li>Leader接收claim并分配任务</li>
+                        <li>各Agent并行处理各自模态内容</li>
+                        <li>源验证Agent通过单一可靠源验证</li>
+                        <li>Leader汇总结果并做出判断</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MEDIUM 难度团队结构 -->
+        <div class="difficulty-section">
+            <div class="difficulty-header medium">
+                MEDIUM - 中等难度团队结构
+            </div>
+            <div class="team-structure">
+                <div class="tree">
+                    <div class="node leader">
+                        高级事实检查Leader
+                        <div class="description">复杂协调，多源整合</div>
+                    </div>
+                    <div class="connection"></div>
+                    <div class="level">
+                        <div class="branch">
+                            <div class="node specialist">
+                                内容分析专家
+                                <div class="description">深度内容分析</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">文本Agent</div>
+                                <div class="node agent">图像Agent</div>
+                                <div class="node agent">视频Agent</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node specialist">
+                                多源验证专家
+                                <div class="description">交叉引用验证</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">源搜索Agent</div>
+                                <div class="node agent">可信度评估Agent</div>
+                                <div class="node agent">交叉验证Agent</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node specialist">
+                                上下文分析专家
+                                <div class="description">时空背景验证</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">时间验证Agent</div>
+                                <div class="node agent">地理验证Agent</div>
+                                <div class="node agent">关联分析Agent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <h4>工作流程：</h4>
+                    <ol>
+                        <li>Leader分析claim复杂度并分配给专家</li>
+                        <li>各专家领导子团队进行专项分析</li>
+                        <li>多源验证专家进行交叉引用</li>
+                        <li>上下文专家验证时空背景</li>
+                        <li>Leader整合多方面分析结果</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <!-- HARD 难度团队结构 -->
+        <div class="difficulty-section">
+            <div class="difficulty-header hard">
+                HARD - 困难难度团队结构
+            </div>
+            <div class="team-structure">
+                <div class="tree">
+                    <div class="node leader">
+                        首席事实检查专家
+                        <div class="description">战略决策，冲突解决</div>
+                    </div>
+                    <div class="connection"></div>
+                    <div class="level">
+                        <div class="branch">
+                            <div class="node specialist">
+                                多模态融合专家
+                                <div class="description">复杂内容关系分析</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">深度文本Agent</div>
+                                <div class="node agent">高级图像Agent</div>
+                                <div class="node agent">视频分析Agent</div>
+                                <div class="node agent">语义关联Agent</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node specialist">
+                                专业知识专家
+                                <div class="description">领域专业判断</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">医学专家Agent</div>
+                                <div class="node agent">科技专家Agent</div>
+                                <div class="node agent">政治专家Agent</div>
+                                <div class="node agent">经济专家Agent</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node specialist">
+                                冲突解决专家
+                                <div class="description">矛盾信息处理</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">信息挖掘Agent</div>
+                                <div class="node agent">置信度评估Agent</div>
+                                <div class="node agent">证据权重Agent</div>
+                                <div class="node agent">决策融合Agent</div>
+                            </div>
+                        </div>
+                        <div class="branch">
+                            <div class="node specialist">
+                                质量保证专家
+                                <div class="description">结果验证审核</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="level">
+                                <div class="node agent">逻辑检查Agent</div>
+                                <div class="node agent">一致性验证Agent</div>
+                                <div class="node agent">可靠性评估Agent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="workflow">
+                    <h4>工作流程：</h4>
+                    <ol>
+                        <li>首席专家评估claim并制定验证策略</li>
+                        <li>多模态专家进行复杂内容关系分析</li>
+                        <li>专业知识专家提供领域专业判断</li>
+                        <li>冲突解决专家处理矛盾信息</li>
+                        <li>质量保证专家验证结果可靠性</li>
+                        <li>首席专家综合所有分析做最终决策</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+            <p>团队规模随难度递增：EASY(4人) → MEDIUM(10人) → HARD(18人)</p>
+        </div>
+    </div>
+</body>
+</html>
