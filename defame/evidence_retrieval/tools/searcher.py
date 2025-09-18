@@ -215,7 +215,27 @@ class Searcher(Tool):
 
     def _remove_known_sources(self, sources: list[Source]) -> list[Source]:
         """Removes already known sources from the list `sources`."""
-        return [r for r in sources if r not in self.known_sources]
+        return [r for r in sources if r not in self.known_sources and not self._is_pdf_source(r)]
+    
+    def _is_pdf_source(self, source: Source) -> bool:
+        """Checks if the source contains a PDF file."""
+        # Check URL attribute (for WebSource)
+        if hasattr(source, 'url') and getattr(source, 'url', None):
+            return '.pdf' in str(getattr(source, 'url')).lower()
+        
+        # Check reference attribute
+        if hasattr(source, 'reference') and getattr(source, 'reference', None):
+            return '.pdf' in str(getattr(source, 'reference')).lower()
+        
+        # Check title attribute
+        if hasattr(source, 'title') and getattr(source, 'title', None):
+            return '.pdf' in str(getattr(source, 'title')).lower()
+        
+        # For WebSource, also check the URL through reference
+        if isinstance(source, WebSource) and getattr(source, 'reference', None):
+            return '.pdf' in str(getattr(source, 'reference')).lower()
+        
+        return False
 
     def _register_sources(self, sources: list[Source]):
         """Adds the provided list of sources to the set of known sources."""
