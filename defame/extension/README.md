@@ -8,22 +8,21 @@
 ## 修改**CR+**的`benchmark.py`
 针对数据集**claimreview2024+**，原数据加载已经实现claim的定义，在此基础上，将分类器集成在benchmark中，初始化会判断是否需要复杂度分类，如果原json中有了difficulty字段，则直接加载，否则通过分类器进行预测并将预测结果存入json，方便下次使用。
 
-## Adaptive Frame
+## Adaptive Frame 1
 
 ### Easy
 
 针对easy类型，在label中的描述为`"Verifiable through single reliable source or simple method. Content (text/image/video) is clear and straightforward, requiring no specialized knowledge."`。被判断为easy的claim通过简单的方法就能判断，这里我的思路是：
-1. 去除planner：因为简单，不需要复杂的工具规划，直接使用固定的工具即可
-2. 只使用websearch：因为简单，不需要额外的工具，直接使用websearch即可
-3. 然后直接往后继续按照原来的defame流程运行。
-
-本质上和原来的defame流程是一样的，因为简单，planner也会直接选择最简单的工具，即websearch。
+planner->summarize->judge 删除develop 改成最大迭代次数2
+本质上和原来的defame流程是一样的，因为简单，planner也会直接选择最简单的工具，也不会太多迭代，也不太需要develop。
 
 ### Medium
 
+将develop+judge阶段改成MAD即多智能体辩论
+
 ### Hard
 
-
+planner指定工具执行并获取相关信息之后，leader将分配任务目标给各个group然后各个group根据获取到的信息执行各自的task，最后leader汇总结果。替换的是summarize+develop+judge
 
 
 根据代码中的定义，三个难度等级分别关注以下问题：

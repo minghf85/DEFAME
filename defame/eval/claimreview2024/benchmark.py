@@ -54,6 +54,7 @@ class ClaimReview2024(Benchmark):
 
         data = []
         for i, entry in enumerate(raw_data):
+            # image_path = Path(data_root_dir / "MAFC" / entry["image"]) if entry["image"] else None
             image_path = Path(data_root_dir / "ClaimReview2024plus" / entry["image"]) if entry["image"] else None
             # print("image_path:", image_path)
             image = Image(image_path) if (image_path and os.path.exists(image_path)) else None
@@ -251,9 +252,74 @@ class ClaimReview2024_with_difficulty(Benchmark):
             json.dump(raw_data, f, ensure_ascii=False, indent=2)
         print(f"完成所有分类，已保存到 {self.file_path}")
 
+class ClaimReview2024_Easy(ClaimReview2024_with_difficulty):
+    """ClaimReview2024 基准的简单难度子集"""
+    name = "ClaimReview2024+ Easy"
+    shorthand = "claimreview2024_easy"
+
+    def _load_data(self) -> list[dict]:
+        # 加载所有数据
+        all_data = super()._load_data()
+        
+        # 筛选难度为 "easy" 的数据
+        easy_data = [item for item in all_data if item.get("difficulty") == "easy"]
+        
+        # 重新分配ID以保持连续性
+        for i, item in enumerate(easy_data):
+            item["id"] = i
+            item["input"].id = i
+        
+        print(f"筛选出 {len(easy_data)} 个简单难度的条目")
+        return easy_data
+
+
+class ClaimReview2024_Medium(ClaimReview2024_with_difficulty):
+    """ClaimReview2024 基准的中等难度子集"""
+    name = "ClaimReview2024+ Medium"
+    shorthand = "claimreview2024_medium"
+
+    def _load_data(self) -> list[dict]:
+        # 加载所有数据
+        all_data = super()._load_data()
+        
+        # 筛选难度为 "medium" 的数据
+        medium_data = [item for item in all_data if item.get("difficulty") == "medium"]
+        
+        # 重新分配ID以保持连续性
+        for i, item in enumerate(medium_data):
+            item["id"] = i
+            item["input"].id = i
+        
+        print(f"筛选出 {len(medium_data)} 个中等难度的条目")
+        return medium_data
+
+
+class ClaimReview2024_Hard(ClaimReview2024_with_difficulty):
+    """ClaimReview2024 基准的困难难度子集"""
+    name = "ClaimReview2024+ Hard"
+    shorthand = "claimreview2024_hard"
+
+    def _load_data(self) -> list[dict]:
+        # 加载所有数据
+        all_data = super()._load_data()
+        
+        # 筛选难度为 "hard" 的数据
+        hard_data = [item for item in all_data if item.get("difficulty") == "hard"]
+        
+        # 重新分配ID以保持连续性
+        for i, item in enumerate(hard_data):
+            item["id"] = i
+            item["input"].id = i
+        
+        print(f"筛选出 {len(hard_data)} 个困难难度的条目")
+        return hard_data
+
 if __name__ == "__main__":
     benchmark = ClaimReview2024_with_difficulty()
+    benchmark_easy = ClaimReview2024_Easy()
+    benchmark_medium = ClaimReview2024_Medium()
+    benchmark_hard = ClaimReview2024_Hard()
     # 批量分类缺失的难度标签
-    benchmark.classify_missing_difficulties()
+    # benchmark.classify_missing_difficulties()
     # for claim in benchmark:
     #     print(claim)
