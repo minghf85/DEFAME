@@ -42,7 +42,27 @@ DEFAULT_DIFFICULTY_DEFINITIONS_V1 = {
 }
 
 DEFAULT_DIFFICULTY_DEFINITIONS = {
-    DifficultyLabel.EASY: "Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.",
-    DifficultyLabel.MEDIUM: "Claims requiring multi-step reasoning, cross-modal analysis, or synthesis of multiple information sources. May involve temporal/causal relationships or require domain-specific context.",
-    DifficultyLabel.HARD: "Claims involving complex reasoning, conflicting evidence, deep domain expertise, or sophisticated manipulation detection. Requires advanced analytical skills and comprehensive evaluation frameworks.",
+    DifficultyLabel.EASY: """Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.
+**Characteristics:**  
+- Directly observable facts (time, location, numbers, names)  
+- Single-modality verification (text-only or image-only)  
+- No background knowledge or specialized skills required  
+- Clear and unambiguous answers, black-and-white distinctions
+""",
+    DifficultyLabel.MEDIUM: """Claims requiring basic cross-referencing between multiple sources or simple multimodal content comparison. May need elementary reasoning or common knowledge context.
+**Characteristics:**  
+- Requires cross-verification from 2-3 information sources  
+- Simple text-image consistency checks  
+- Basic chronological or logical reasoning  
+- Requires common sense knowledge but no specialized skills  
+- May involve minor information incompleteness
+""",
+    DifficultyLabel.HARD: """Claims involving complex reasoning, conflicting evidence, deep domain expertise, or sophisticated manipulation detection. Requires advanced analytical skills and comprehensive evaluation frameworks.
+**Characteristics:**  
+- Requires in-depth knowledge of specialized fields  
+- Involves contradictory or severely incomplete evidence  
+- Complex multimodal content tampering detection  
+- Requires integration of multiple analytical dimensions and evaluation frameworks  
+- Involves complex causal chains or reasoning networks
+"""
 }
