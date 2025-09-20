@@ -35,8 +35,14 @@ class DifficultyLabel(Enum):
     MEDIUM = "medium"
     HARD = "hard"
 
-DEFAULT_DIFFICULTY_DEFINITIONS = {
+DEFAULT_DIFFICULTY_DEFINITIONS_V1 = {
     DifficultyLabel.EASY: "Verifiable through single reliable source or simple method. Content (text/image/video) is clear and straightforward, requiring no specialized knowledge.",
     DifficultyLabel.MEDIUM: "Requires cross-referencing multiple sources. Content may need detailed analysis, temporal/spatial context verification, or multimodal content correlation.",
     DifficultyLabel.HARD: "Lacks reliable sources, has conflicting information, or requires specialized knowledge to analyze complex content relationships across text, visual, and contextual elements.",
+}
+
+DEFAULT_DIFFICULTY_DEFINITIONS = {
+    DifficultyLabel.EASY: "Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.",
+    DifficultyLabel.MEDIUM: "Claims requiring multi-step reasoning, cross-modal analysis, or synthesis of multiple information sources. May involve temporal/causal relationships or require domain-specific context.",
+    DifficultyLabel.HARD: "Claims involving complex reasoning, conflicting evidence, deep domain expertise, or sophisticated manipulation detection. Requires advanced analytical skills and comprehensive evaluation frameworks.",
 }

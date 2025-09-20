@@ -4,7 +4,7 @@ from defame.common import Report, Label, logger
 from defame.procedure.procedure import Procedure
 
 
-class DynamicSummary(Procedure):
+class HardDynamicSummary(Procedure):
     def __init__(self, max_iterations: int = 3, **kwargs):
         super().__init__(**kwargs)
         self.max_iterations = max_iterations
