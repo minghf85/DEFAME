@@ -59,7 +59,6 @@ class ClaimReview2024(Benchmark):
             # print("image_path:", image_path)
             image = Image(image_path) if (image_path and os.path.exists(image_path)) else None
             claim_text = f"{image.reference} {entry['text']}" if image else f"{entry['text']}"
-            print(claim_text)
             label_text = entry.get("label")
             date_str = entry.get("date")
             date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ") if date_str else None
@@ -122,7 +121,6 @@ class ClaimReview2024_with_difficulty(Benchmark):
             # print("image_path:", image_path)
             image = Image(image_path) if (image_path and os.path.exists(image_path)) else None
             claim_text = f"{image.reference} {entry['text']}" if image else f"{entry['text']}"
-            print(claim_text)
             label_text = entry.get("label")
             date_str = entry.get("date")
             date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ") if date_str else None
