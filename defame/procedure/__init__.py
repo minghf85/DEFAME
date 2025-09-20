@@ -14,8 +14,14 @@ from .variants.summary_based.all_actions import AllActionsSummary
 from .variants.summary_based.no_develop import NoDevelop
 from .variants.summary_based.no_qa import NoQA
 from .variants.summary_based.static import StaticSummary
+from extension.easy_procedure import EasyDynamicSummary
+from extension.medium_procedure import MediumDynamicSummary
+from extension.hard_procedure import HardDynamicSummary
 
 PROCEDURE_REGISTRY = {
+    "easy": EasyDynamicSummary,
+    "medium": MediumDynamicSummary,
+    "hard": HardDynamicSummary,
     "defame": DynamicSummary,
     "infact": InFact,
 
