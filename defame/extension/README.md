@@ -25,7 +25,7 @@
 "Lacks reliable sources, has conflicting information, or requires specialized knowledge to analyze complex content relationships across text, visual, and contextual elements."
 "缺乏可靠信息来源、存在矛盾内容，或需要专业知识来分析文本、视觉与语境元素之间的复杂关系。"
 
-### 1.2 DEFAULT_DIFFICULTY_DEFINITIONS V2
+### 1.2 DEFAULT_DIFFICULTY_DEFINITIONS V3
 
 输入有图片
 ![alt text](image-2.png)
@@ -90,7 +90,6 @@
 - 复杂的多模态内容篡改检测
 - 需要综合多个分析维度和评估框架
 - 涉及复杂的因果链或推理网络
-
 "
 
 ## 2. 修改**CR+**的`benchmark.py`

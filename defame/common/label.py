@@ -41,7 +41,13 @@ DEFAULT_DIFFICULTY_DEFINITIONS_V1 = {
     DifficultyLabel.HARD: "Lacks reliable sources, has conflicting information, or requires specialized knowledge to analyze complex content relationships across text, visual, and contextual elements.",
 }
 
-DEFAULT_DIFFICULTY_DEFINITIONS = {
+DEFAULT_DIFFICULTY_DEFINITIONS_V2 = {
+    DifficultyLabel.EASY: "Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.",
+    DifficultyLabel.MEDIUM: "Claims requiring multi-step reasoning, cross-modal analysis, or synthesis of multiple information sources. May involve temporal/causal relationships or require domain-specific context.",
+    DifficultyLabel.HARD: "Claims involving complex reasoning, conflicting evidence, deep domain expertise, or sophisticated manipulation detection. Requires advanced analytical skills and comprehensive evaluation frameworks.",
+}
+
+DEFAULT_DIFFICULTY_DEFINITIONS_V3 = {
     DifficultyLabel.EASY: """Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.
 **Characteristics:**  
 - Directly observable facts (time, location, numbers, names)  
@@ -65,4 +71,13 @@ DEFAULT_DIFFICULTY_DEFINITIONS = {
 - Requires integration of multiple analytical dimensions and evaluation frameworks  
 - Involves complex causal chains or reasoning networks
 """
+}
+
+DEFAULT_DIFFICULTY_DEFINITIONS = {
+    DifficultyLabel.EASY: """Claims with objective, factual content that can be verified through direct observation or single authoritative source. Requires basic reading comprehension and simple fact-checking skills.""",
+    # 客观事实性内容，可通过直接观察或单一权威来源验证。仅需基本阅读理解和简单的事实核查技能。
+    DifficultyLabel.MEDIUM: """Claims requiring basic cross-referencing between multiple sources or simple multimodal content comparison. May need elementary reasoning or common knowledge context.""",
+    # 需要多个信息源的基本交叉验证或简单的多模态内容比对。可能需要初级推理或常识性背景知识。
+    DifficultyLabel.HARD: """Claims involving complex reasoning, conflicting evidence, deep domain expertise, or sophisticated manipulation detection. Requires advanced analytical skills and comprehensive evaluation frameworks."""
+    # 涉及复杂推理、矛盾证据、深度专业知识或复杂篡改检测。需要高级分析技能和综合评估框架。
 }
