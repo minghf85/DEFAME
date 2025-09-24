@@ -55,7 +55,7 @@ class Geolocator(Tool):
     actions = [Geolocate]
     summarize = False
 
-    def __init__(self, model_name: str = "geolocal/StreetCLIP", top_k=10, **kwargs):
+    def __init__(self, model_name: str = "./StreetCLIP", top_k=10, **kwargs):
         super().__init__(**kwargs)
         """
         Initialize the GeoLocator with a pretrained model from Hugging Face.
